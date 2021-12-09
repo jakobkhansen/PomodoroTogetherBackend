@@ -1,0 +1,22 @@
+{
+  "name": "pomodorotogetherbackend",
+  "version": "1.0.0",
+  "description": "Pomodoro Together Backend",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "prestart": "npm run build",
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jakobkhansen/PomodoroTogetherBackend.git"
+  },
+  "author": "jakobkhansen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jakobkhansen/PomodoroTogetherBackend/issues"
+  },
+  "homepage": "https://github.com/jakobkhansen/PomodoroTogetherBackend#readme"
+}
