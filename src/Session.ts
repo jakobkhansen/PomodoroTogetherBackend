@@ -1,29 +1,29 @@
 import { Socket } from "socket.io";
 import { PomodoroTimer } from "./PomodoroTimer";
 import { ServerManager } from "./ServerManager";
+import { SessionEventListener } from "./SessionEventListener";
+
+const io = ServerManager.getInstance().io;
 
 export class Session {
   roomId: string;
-  timer: PomodoroTimer = new PomodoroTimer();
+  updateUsers = () => {
+    io.to(this.roomId).emit("session update", this.timer.serialize());
+  };
+  timer: PomodoroTimer = new PomodoroTimer(this.updateUsers);
+  eventListener = new SessionEventListener(this.timer)
 
   constructor(id: string) {
     this.roomId = id;
-    this.initializeSession()
   }
 
-  private initializeSession() {
-    setInterval(() => {
-      this.statusUpdate()
-    }, 3000)
-  }
 
-  public joinSession(socket : Socket) : void {
+  public joinSession(socket: Socket): void {
     socket.join(this.roomId);
   }
 
-  public statusUpdate() : void {
-    console.log("Sending update")
-    const io = ServerManager.getInstance().io
-    io.to(this.roomId).emit("update", this.timer)
+  public listenForEvents(socket : Socket) : void {
+    this.eventListener.registerSocket(socket)
   }
+
 }
