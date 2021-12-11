@@ -20,6 +20,9 @@
     "url": "https://github.com/jakobkhansen/PomodoroTogetherBackend/issues"
   },
   "homepage": "https://github.com/jakobkhansen/PomodoroTogetherBackend#readme",
+  "engines": {
+    "node": "17.x"
+  },
   "dependencies": {
     "@types/express": "4",
     "express": "4",
