@@ -34,9 +34,6 @@ export class PomodoroTimer {
 
   public initializeInterval() {
     return setInterval(() => {
-      console.log(this.state);
-      console.log(runningTimerStates);
-      console.log(this.state in runningTimerStates);
       if (this.timerRunning()) {
         this.timer--;
         if (this.timer <= 0) this.stopTimer();

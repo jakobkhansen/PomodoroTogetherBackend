@@ -1,60 +1,65 @@
 import { Socket } from "socket.io";
-import { PomodoroTimer } from "./PomodoroTimer";
 
+import { PomodoroTimer } from "./PomodoroTimer";
 
 // TODO refactor this, probably don't even need separate methods
 export class SessionEventListener {
-  socket : Socket
-  timer : PomodoroTimer
+  socket: Socket;
+  timer: PomodoroTimer;
 
-  constructor(timer : PomodoroTimer) {
-    this.timer = timer
+  constructor(timer: PomodoroTimer) {
+    this.timer = timer;
   }
 
-  public registerSocket(socket : Socket) {
-    this.startListener(socket)
-    this.pauseListener(socket)
+  // Register all events socket can send
+  public registerSocket(socket: Socket) {
+    // Run handler, update users
+    Object.values(this.events).forEach(([event, handler]) => {
+      socket.on(event, (args) => {
+        handler(args);
+        this.timer.updateUsers();
+      });
+    });
   }
 
-  public startListener(socket : Socket) {
-    const timer = this.timer
-    socket.on('session start', (time : number) => {
-      timer.startTimer(time)
-      timer.updateUsers()
-    })
+  events: { [key: string]: [string, (...args: any[]) => void] } = {
+    start: [
+      "session start",
+      (time: number) => {
+        this.timer.startTimer(time);
+      },
+    ],
+    pause: [
+      "session pause",
+      () => {
+        this.timer.pauseTimer();
+      },
+    ],
+    unpause: [
+      "session unpause",
+      () => {
+        this.timer.unPauseTimer();
+      },
+    ],
+    stop: [
+      "session stop",
+      () => {
+        this.timer.stopTimer();
+      },
+    ],
+    // Empty handler, only sends back updates
+    update: [
+      "session update",
+      () => {}
+    ]
+  };
 
-  }
-
-  public pauseListener(socket : Socket) {
-    const timer = this.timer
-    socket.on('session pause', () => {
-      timer.pauseTimer()
-      timer.updateUsers()
-    })
-  }
-
-  public unPauseListener(socket : Socket) {
-    const timer = this.timer
-    socket.on('session unpause', () => {
-      timer.unPauseTimer()
-      timer.updateUsers()
-    })
-  }
-
-  public stopListener(socket : Socket) {
-    const timer = this.timer
-    socket.on('session stop', () => {
-      timer.stopTimer()
-      timer.updateUsers()
-    })
-  }
 
   // Client requests an update from server
-  public updateListener(socket : Socket) {
-    const timer = this.timer
-    socket.on('session stop', () => {
-      timer.updateUsers()
-    })
+  public updateListener(socket: Socket) {
+    const timer = this.timer;
+    socket.on("session stop", () => {
+      timer.updateUsers();
+    });
   }
-
 }
