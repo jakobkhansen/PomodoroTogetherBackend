@@ -20,4 +20,4 @@ io.on('connection', (socket): void => {
   })
 });
 
-httpServer.listen(3000);
+httpServer.listen(process.env.PORT || 3000);
