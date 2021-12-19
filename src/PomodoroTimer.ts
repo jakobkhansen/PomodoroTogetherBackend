@@ -68,8 +68,10 @@ export class PomodoroTimer {
 
   public serialize() {
     return {
-      timer: this.timer,
-      state: this.state,
+      clock: {
+        timer: this.timer,
+        state: this.state,
+      }
     };
   }
 }
