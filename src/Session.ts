@@ -7,25 +7,36 @@ const io = ServerManager.getInstance().io;
 
 export class Session {
   roomId: string;
-  users: String[] = [];
+  users: { [socketId: string]: string } = {};
   updateUsers = () => {
-    io.to(this.roomId).emit("session update", {...this.timer.serialize(), users: this.users});
+    io.to(this.roomId).emit("session update", this.serialize());
   };
   timer: PomodoroTimer = new PomodoroTimer(this.updateUsers);
-  eventListener = new SessionEventListener(this.timer)
+  eventListener = new SessionEventListener(this.timer);
 
   constructor(id: string) {
     this.roomId = id;
   }
 
-
-  public joinSession(socket: Socket, displayName : string): void {
+  public joinSession(socket: Socket, displayName: string): void {
     socket.join(this.roomId);
-    this.users.push(displayName)
+    this.users[socket.id] = displayName;
+
+    // Disconnect handler
+    socket.on('disconnect', () => {
+      delete this.users[socket.id]
+      this.updateUsers()
+    })
   }
 
-  public listenForEvents(socket : Socket) : void {
-    this.eventListener.registerSocket(socket)
+  public listenForEvents(socket: Socket): void {
+    this.eventListener.registerSocket(socket);
   }
 
+  public serialize() {
+    return {
+      users: Object.values(this.users),
+      clock: this.timer.serialize()
+    };
+  }
 }

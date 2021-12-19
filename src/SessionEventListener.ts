@@ -1,6 +1,7 @@
 import { Socket } from "socket.io";
 
 import { PomodoroTimer } from "./PomodoroTimer";
+import { Session } from "./Session";
 
 // TODO refactor this, probably don't even need separate methods
 export class SessionEventListener {
@@ -53,13 +54,4 @@ export class SessionEventListener {
       () => {}
     ]
   };
-
-
-  // Client requests an update from server
-  public updateListener(socket: Socket) {
-    const timer = this.timer;
-    socket.on("session stop", () => {
-      timer.updateUsers();
-    });
-  }
 }
