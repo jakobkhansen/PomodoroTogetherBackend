@@ -7,7 +7,7 @@ const io = ServerManager.getInstance().io;
 
 export class Session {
   roomId: string;
-  users: String[];
+  users: String[] = [];
   updateUsers = () => {
     io.to(this.roomId).emit("session update", {...this.timer.serialize(), users: this.users});
   };
