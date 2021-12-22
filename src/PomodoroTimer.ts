@@ -36,7 +36,10 @@ export class PomodoroTimer {
     return setInterval(() => {
       if (this.timerRunning()) {
         this.timer--;
-        if (this.timer <= 0) this.stopTimer();
+        if (this.timer <= 0) {
+          this.stopTimer();
+          this.updateUsers();
+        }
       }
     }, 1000);
   }
