@@ -1,3 +1,5 @@
+import { getDateSeconds } from "./Utils";
+
 enum PomodoroState {
   WORKING, // Main timer
   WORKING_PAUSED, // Timer is paused
@@ -17,9 +19,9 @@ const pausedTimerStates = [
   so that we don't need to tick each session every second
 */
 export class PomodoroTimer {
-  timer: number = 0;
+  timestamp : number
+  timeLeft : number
   state: PomodoroState = PomodoroState.DONE;
-  interval = this.initializeInterval();
   updateUsers: () => void;
 
   public constructor(updateCallback: () => void) {
@@ -27,37 +29,30 @@ export class PomodoroTimer {
   }
 
   public startTimer(seconds: number) {
-    this.timer = seconds;
+    this.timestamp = getDateSeconds()
+    this.timeLeft = seconds
     this.state = PomodoroState.WORKING;
     this.updateUsers();
   }
 
-  public initializeInterval() {
-    return setInterval(() => {
-      if (this.timerRunning()) {
-        this.timer--;
-        if (this.timer <= 0) {
-          this.stopTimer();
-          this.updateUsers();
-        }
-      }
-    }, 1000);
-  }
-
   public pauseTimer() {
     if (this.timerRunning()) {
+      this.timeLeft = getDateSeconds() - this.timestamp
+      this.timestamp = getDateSeconds()
       this.state++;
+      this.checkIfDone()
     }
   }
 
   public unPauseTimer() {
     if (this.timerPaused()) {
+      this.timestamp = getDateSeconds()
       this.state--;
     }
   }
 
   public stopTimer() {
-    this.timer = 0;
+    this.timeLeft = 0
     this.state = PomodoroState.DONE;
   }
 
@@ -69,9 +64,16 @@ export class PomodoroTimer {
     return pausedTimerStates.includes(this.state);
   }
 
+  private checkIfDone() {
+    if (this.timeLeft < 0) {
+      this.stopTimer()
+    }
+  }
+
   public serialize() {
     return {
-      timer: this.timer,
+      timestamp : this.timestamp,
+      timeLeft : this.timeLeft,
       state: this.state,
     };
   }
