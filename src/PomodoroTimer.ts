@@ -37,7 +37,7 @@ export class PomodoroTimer {
 
   public pauseTimer() {
     if (this.timerRunning()) {
-      this.timeLeft = getDateSeconds() - this.timestamp
+      this.timeLeft -= getDateSeconds() - this.timestamp
       this.timestamp = getDateSeconds()
       this.state++;
       this.checkIfDone()
