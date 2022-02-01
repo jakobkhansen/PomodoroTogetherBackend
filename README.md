@@ -12,4 +12,5 @@ This backend uses
 
 * Typescript
 * Node.js
+* Express
 * Socket.IO
