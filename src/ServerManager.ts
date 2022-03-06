@@ -12,9 +12,7 @@ export class ServerManager {
   private constructor() {
     this.app = express();
     this.httpServer = createServer(this.app);
-    this.io = new Server(this.httpServer, {
-      cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] },
-    });
+    this.io = new Server(this.httpServer, {cors : {}});
   }
 
   public static getInstance(): ServerManager {
