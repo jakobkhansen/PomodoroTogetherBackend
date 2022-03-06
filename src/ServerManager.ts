@@ -3,22 +3,24 @@ import { createServer } from "http";
 import express from "express";
 
 export class ServerManager {
-  private static instance : ServerManager
+  private static instance: ServerManager;
 
-  public app
-  public httpServer
-  public io
+  public app;
+  public httpServer;
+  public io;
 
   private constructor() {
-    this.app = express()
-    this.httpServer = createServer(this.app)
-    this.io = new Server(this.httpServer)
+    this.app = express();
+    this.httpServer = createServer(this.app);
+    this.io = new Server(this.httpServer, {
+      cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] },
+    });
   }
 
-  public static getInstance() : ServerManager {
+  public static getInstance(): ServerManager {
     if (!ServerManager.instance) {
-      ServerManager.instance = new ServerManager()
+      ServerManager.instance = new ServerManager();
     }
-    return ServerManager.instance
+    return ServerManager.instance;
   }
 }
