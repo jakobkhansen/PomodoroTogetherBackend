@@ -9,6 +9,7 @@ export class Session {
   roomId: string;
   users: { [socketId: string]: string } = {};
   updateUsers = () => {
+    this.timer.updateTimestamp()
     io.to(this.roomId).emit("session update", this.serialize());
   };
   timer: PomodoroTimer = new PomodoroTimer(this.updateUsers);

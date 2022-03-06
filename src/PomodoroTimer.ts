@@ -28,6 +28,13 @@ export class PomodoroTimer {
     this.updateUsers = updateCallback;
   }
 
+  public updateTimestamp() {
+    if (this.timerRunning()) {
+      this.timeLeft -= getDateSeconds() - this.timestamp
+      this.timestamp = getDateSeconds()
+    }
+  }
+
   public startTimer(seconds: number) {
     this.timestamp = getDateSeconds()
     this.timeLeft = seconds
@@ -37,8 +44,6 @@ export class PomodoroTimer {
 
   public pauseTimer() {
     if (this.timerRunning()) {
-      this.timeLeft -= getDateSeconds() - this.timestamp
-      this.timestamp = getDateSeconds()
       this.state++;
       this.checkIfDone()
     }
