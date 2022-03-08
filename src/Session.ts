@@ -28,6 +28,11 @@ export class Session {
       delete this.users[socket.id]
       this.updateUsers()
     })
+
+    socket.on('session leave', () => {
+      delete this.users[socket.id]
+      this.updateUsers()
+    })
   }
 
   public listenForEvents(socket: Socket): void {
