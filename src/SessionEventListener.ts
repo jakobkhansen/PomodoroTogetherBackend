@@ -49,6 +49,12 @@ export class SessionEventListener {
         this.timer.stopTimer();
       },
     ],
+    increment: [
+      "session increment",
+      (time: number) => {
+        this.timer.incrementTimer(time);
+      },
+    ],
     // Empty handler, only sends back updates
     update: [
       "session update",

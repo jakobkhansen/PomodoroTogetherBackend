@@ -61,6 +61,10 @@ export class PomodoroTimer {
     this.state = PomodoroState.DONE;
   }
 
+  public incrementTimer(seconds : number) {
+    this.timeLeft += seconds
+  }
+
   private timerRunning() {
     return runningTimerStates.includes(this.state);
   }
