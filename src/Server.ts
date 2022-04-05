@@ -12,6 +12,9 @@ const httpServer = serverManager.httpServer
 io.on('connection', (socket): void => {
   console.log("User connected")
   socket.on('session join', (id, displayName) => {
+
+    console.log(displayName + " connecting to session: " + id)
+
     const session = sessionManager.getSession(id)
 
     session.joinSession(socket, displayName)

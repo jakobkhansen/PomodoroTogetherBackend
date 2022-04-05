@@ -17,6 +17,7 @@ export class SessionEventListener {
     // Run handler, update users
     Object.values(this.events).forEach(([event, handler]) => {
       socket.on(event, (args) => {
+        console.info("Event: " + event)
         this.timer.updateTimestamp()
         handler(args);
         this.timer.updateUsers();

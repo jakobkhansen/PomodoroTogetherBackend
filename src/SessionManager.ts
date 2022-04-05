@@ -11,6 +11,7 @@ export class SessionManager {
 
   public getSession(id: string): Session {
     if (!this.sessions[id]) {
+      console.log("Creating new session, ID: " + id)
       this.sessions[id] = new Session(id);
     }
     return this.sessions[id];
